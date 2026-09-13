@@ -1,0 +1,9 @@
+{
+  "name": "stock-dashboard-market-feed",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "fetch": "node fetch-market-feed.mjs"
+  }
+}

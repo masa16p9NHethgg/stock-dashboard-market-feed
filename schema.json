@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Encrypted stock dashboard market feed",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "encryption", "ciphertext_b64"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "encryption": {
+      "type": "object",
+      "required": ["algorithm", "iv_b64", "tag_b64"],
+      "properties": {
+        "algorithm": { "const": "AES-256-GCM" },
+        "iv_b64": { "type": "string", "minLength": 16 },
+        "tag_b64": { "type": "string", "minLength": 16 }
+      },
+      "additionalProperties": false
+    },
+    "ciphertext_b64": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

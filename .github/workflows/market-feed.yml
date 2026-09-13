@@ -1,0 +1,40 @@
+name: Update encrypted market feed
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 21 * * *"
+    - cron: "30 3 * * *"
+    - cron: "30 7 * * *"
+    - cron: "30 14 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: market-feed
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fetch and encrypt
+        env:
+          MARKET_FEED_KEY_B64: ${{ secrets.MARKET_FEED_KEY_B64 }}
+          PORTFOLIO_SYMBOL_MAP_JSON: ${{ secrets.PORTFOLIO_SYMBOL_MAP_JSON }}
+        run: node fetch-market-feed.mjs
+      - name: Validate envelope
+        run: node --input-type=module -e "const p=JSON.parse(await (await import('node:fs/promises')).readFile('market-feed.enc.json','utf8')); if(p.schema_version!==1||p.encryption?.algorithm!=='AES-256-GCM'||!p.ciphertext_b64) process.exit(1);"
+      - name: Publish artifact
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add market-feed.enc.json
+          git diff --cached --quiet || git commit -m "chore: update encrypted market feed"
+          git push
