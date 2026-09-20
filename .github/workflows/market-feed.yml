@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Test market feed adapters
+        run: npm test
       - name: Fetch and encrypt
         env:
           MARKET_FEED_KEY_B64: ${{ secrets.MARKET_FEED_KEY_B64 }}

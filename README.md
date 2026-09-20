@@ -14,3 +14,5 @@
 ## Safety
 
 The scheduled workflow is read-only against the market data provider. It does not access brokerage accounts and never prints secrets or decrypted payloads.
+
+TOPIX (`topix`) is collected by the dedicated Yahoo!ファイナンス日本版 `998405.T` current/history adapter. Other public indices continue to use the existing Yahoo Finance chart endpoint. The adapter retains only current/previous/change, timestamp, and up to 370 days of daily close values in the encrypted payload.

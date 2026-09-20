@@ -4,6 +4,7 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "fetch": "node fetch-market-feed.mjs"
+    "fetch": "node fetch-market-feed.mjs",
+    "test": "node tests/topix-adapter.test.mjs"
   }
 }
